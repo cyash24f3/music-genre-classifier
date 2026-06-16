@@ -20,7 +20,7 @@ pinned: false
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Classify music audio into 10 genres using an Audio Spectrogram Transformer**
+**Classify music audio into 10 genres using MERT (Music Audio Representation Transformer)**
 
 *A Kaggle competition portfolio project by [Yash Chavan](https://github.com/cyash24f3)*
 
@@ -43,7 +43,7 @@ pinned: false
 
 ## 🎯 Overview
 
-This project classifies music audio clips into **10 genres** using a pretrained **Audio Spectrogram Transformer (AST)** model. It was originally built for a Kaggle competition involving noisy music mashup classification, exploring multiple approaches from MFCC+XGBoost baselines to custom CNNs to state-of-the-art transformers.
+This project classifies music audio clips into **10 genres** using a fine-tuned **MERT (Music Audio Representation Transformer)** model. It was originally built for a Kaggle competition involving noisy music mashup classification, exploring multiple approaches from MFCC+XGBoost baselines to custom CNNs to state-of-the-art transformers.
 
 ### Supported Genres
 
@@ -58,7 +58,7 @@ This project classifies music audio clips into **10 genres** using a pretrained 
 
 | Layer | Technology |
 |-------|-----------|
-| **Model** | [AST (Audio Spectrogram Transformer)](https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593) — pretrained on AudioSet-527 |
+| **Model** | MERT (Music Audio Representation Transformer) — fine-tuned music transformer |
 | **Backend** | FastAPI with async endpoints |
 | **Frontend** | Gradio 4.x Blocks with custom Spotify-inspired dark theme |
 | **Audio Processing** | librosa, torchaudio, soundfile |
@@ -83,25 +83,25 @@ Audio File (.wav/.mp3/.flac/.ogg)
     │         │
     ▼         ▼
 ┌────────┐ ┌──────────────────┐
-│  Mel   │ │  AST Feature     │
-│ Spec.  │ │  Extractor       │
-│ (viz)  │ │  → Model Input   │
+│  Mel   │ │  MERT Feature    │
+│ Spec.  │ │  → Model Input   │
+│ (viz)  │ │  │
 └────────┘ └────────┬─────────┘
                     │
                     ▼
           ┌──────────────────┐
-          │  AST Inference   │  → 527 AudioSet class probs
+          │  MERT Inference  │  → Genre probabilities
           │  (Transformer)   │
           └────────┬─────────┘
                    │
                    ▼
           ┌──────────────────┐
-          │  Genre Mapping   │  → Aggregate to 10 genres
+          │  Genre Mapping   │  → Normalize to 10 genres
           │  & Normalization │
           └──────────────────┘
 ```
 
-The AST model outputs probabilities for 527 AudioSet classes. We aggregate related classes (e.g., "Rock music", "Punk rock", "Indie rock" → **Rock**) and normalize to produce genre confidence scores.
+The MERT model processes audio features and maps them to confidence scores for each of the 10 target music genres.
 
 ---
 
@@ -150,7 +150,7 @@ GET /api/health
 ```json
 {
   "status": "ok",
-  "model": "AST-AudioSet",
+  "model": "MERT-Music-Transformer",
   "genres": ["blues","classical","country","disco","hiphop","jazz","metal","pop","reggae","rock"],
   "loaded": true
 }
@@ -205,7 +205,7 @@ music-genre-classifier/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py          # FastAPI + Gradio app
-│   └── model.py         # AST model, inference, spectrogram
+│   └── model.py         # MERT model, inference, spectrogram
 ├── Dockerfile           # Optimised container
 ├── requirements.txt     # Python dependencies
 ├── README.md            # This file
@@ -224,6 +224,6 @@ This project is open-source under the [MIT License](LICENSE).
 
 **Built with ❤️ by [Yash Chavan](https://github.com/cyash24f3)**
 
-*Portfolio Demo · Audio Spectrogram Transformer · Kaggle Competition Project*
+*Portfolio Demo · MERT Music Transformer · Kaggle Competition Project*
 
 </div>

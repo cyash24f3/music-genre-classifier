@@ -2,7 +2,7 @@
 Music Genre Classifier — FastAPI + Gradio Application.
 
 Serves both a REST API and a Spotify-inspired Gradio web UI for classifying
-music audio into 10 genres using an Audio Spectrogram Transformer.
+music audio into 10 genres using MERT (Music Audio Representation Transformer).
 
 Author: Yash Chavan
 GitHub: https://github.com/cyash24f3/music-genre-classifier
@@ -52,7 +52,7 @@ async def lifespan(application: FastAPI):
 
 app = FastAPI(
     title="Music Genre Classifier API",
-    description="Classify music audio into 10 genres using Audio Spectrogram Transformer",
+    description="Classify music audio into 10 genres using MERT (Music Audio Representation Transformer)",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -74,7 +74,7 @@ async def health_check():
     """Health-check endpoint."""
     return {
         "status": "ok",
-        "model": "AST-AudioSet",
+        "model": "MERT-Music-Transformer",
         "genres": GENRES,
         "loaded": is_model_loaded(),
     }
@@ -281,7 +281,7 @@ def build_gradio_app() -> gr.Blocks:
             gr.Markdown("# 🎧 Music Genre Classifier")
 
         gr.HTML(
-            '<p>Powered by <strong>Audio Spectrogram Transformer</strong> · '
+            '<p>Powered by <strong>MERT Music Transformer</strong> · '
             'A portfolio project by '
             '<a href="https://github.com/cyash24f3/music-genre-classifier" '
             'target="_blank">Yash Chavan</a></p>',
@@ -360,7 +360,7 @@ def build_gradio_app() -> gr.Blocks:
             'target="_blank">GitHub</a> · '
             '<a href="https://huggingface.co/spaces/cyash1204/music-genre-classifier" '
             'target="_blank">HF Space</a> · '
-            "Audio Spectrogram Transformer on AudioSet-527</p>",
+            "MERT (Music Audio Representation Transformer)</p>",
             elem_id="footer-html",
         )
 

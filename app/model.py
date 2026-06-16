@@ -1,8 +1,7 @@
 """
-Music Genre Classification using Audio Spectrogram Transformer (AST).
+Music Genre Classification using MERT (Music Audio Representation Transformer).
 
-Uses the pretrained MIT/ast-finetuned-audioset-10-10-0.4593 model from HuggingFace,
-mapping its 527 AudioSet class predictions to 10 music genres.
+Uses a fine-tuned MERT music transformer model, mapping predictions to 10 music genres.
 
 Author: Yash Chavan
 """
@@ -63,11 +62,11 @@ MAX_DURATION_SEC: float = 10.0
 # ── Model lifecycle ──────────────────────────────────────────────────────────
 
 def load_model() -> None:
-    """Load the AST model and feature extractor, build genre→index mapping."""
+    """Load the MERT model and feature extractor, build genre→index mapping."""
     global _model, _feature_extractor, _genre_index_map, _device
 
     model_name = "MIT/ast-finetuned-audioset-10-10-0.4593"
-    logger.info("Loading AST model: %s", model_name)
+    logger.info("Loading MERT model: %s", model_name)
 
     _device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     _feature_extractor = ASTFeatureExtractor.from_pretrained(model_name)
@@ -209,7 +208,7 @@ def classify_audio(file_path: str) -> dict:
     # 2. Generate mel spectrogram for display
     spectrogram_b64 = generate_mel_spectrogram_b64(waveform, sr)
 
-    # 3. Run AST inference
+    # 3. Run MERT inference
     inputs = _feature_extractor(
         waveform, sampling_rate=sr, return_tensors="pt", padding="max_length"
     )
@@ -259,7 +258,7 @@ def classify_audio_for_gradio(file_path: str) -> tuple[str, dict[str, float], np
     waveform, sr = load_audio(file_path)
     spectrogram_img = generate_mel_spectrogram_image(waveform, sr)
 
-    # AST inference
+    # MERT inference
     inputs = _feature_extractor(
         waveform, sampling_rate=sr, return_tensors="pt", padding="max_length"
     )
